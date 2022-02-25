@@ -91,7 +91,7 @@ while running:
             sleep(sleepTime)
     
     # In case code ends before the end of the day
-    if day == EST.strftime("%d"):
+    if day == arrow.now('US/Eastern').strftime("%d"):
         waitingForNextDay = True
         while waitingForNextDay:
             if day == EST.strftime("%d"):
