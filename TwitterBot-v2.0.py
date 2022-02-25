@@ -1,17 +1,34 @@
 # Version 2.0
-# This version is made for server use
+# This version is made for server use on https://replit.com/
 
-from datetime import date, datetime
-from operator import truediv
+from datetime import datetime
+import arrow
 from time import sleep
+import flask
+from threading import Thread
 from os import path
 import sys
 import tweepy
 import Keys as k
 
+# Setup https server so https://uptimerobot.com/ can ping it
+app = flask.Flask(__name__)
+@app.route("/")
+def index():
+  return "Todays Holidays Twitter Bot"
+
+def runapp():
+  app.run("0.0.0.0", port=6969)
+
+def run():
+  Thread(target = runapp).start()
+
+run()
+
 # Get Seconds till Midnight
 def secondsTilMidnight():
-    now = datetime.now()
+    EST = arrow.now('US/Eastern') 
+    now = EST
     return ((24 - now.hour - 1) * 60 * 60) + ((60 - now.minute - 1) * 60) + (60 - now.second)
 
 # Converts date to text file
@@ -27,12 +44,13 @@ api = tweepy.API(auth)
 running = True
 while running:
     # Get day and month
-    today = date.today().strftime("%b %d")
+    EST = arrow.now('US/Eastern') 
+    today = EST.strftime("%b %d")
     month = today.split()[0]
     day = today.split()[1]
 
     # Get holidays for today
-    with open(path.join(sys.path[0], f"Holidays\{dateToTxt[month]}"), 'r') as f:
+    with open(f"Holidays/{dateToTxt[month]}", 'r') as f:
         lines = f.readlines()
         holidays = []
         
@@ -52,7 +70,7 @@ while running:
             exit()
         
     # Special Enders
-    enders = ["year", "month", "week", date.today().strftime("%B").lower()]
+    enders = ["year", "month", "week", EST.strftime("%B").lower()]
 
     # Tweets Holidays
     for holiday in holidays:
@@ -68,14 +86,17 @@ while running:
         
         # Seperate tweets through out the day
         if holiday != holidays[len(holidays) - 1]:
-            sleepTime = secondsTilMidnight() / len(holidays) - holidays.index(holiday) + 1
+            sleepTime = secondsTilMidnight()/len(holidays)-holidays.index(holiday)+1
+            print(f"In {round(sleepTime/60)} minutes the next tweet will be posted")
             sleep(sleepTime)
     
     # In case code ends before the end of the day
-    if day == date.today().strftime("%d"):
+    if day == EST.strftime("%d"):
         waitingForNextDay = True
         while waitingForNextDay:
-            if day == date.today().strftime("%d"):
+            if day == EST.strftime("%d"):
                 sleep(1)
             else:
                 waitingForNextDay = False
+    
+    sleep(1)
