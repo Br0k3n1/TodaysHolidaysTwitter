@@ -73,6 +73,7 @@ while running:
     enders = ["year", "month", "week", EST.strftime("%B").lower()]
 
     # Tweets Holidays
+    sleepTime = secondsTilMidnight()/len(holidays)
     for holiday in holidays:
         if 'day' in holiday.lower():
             api.update_status(f"Today is {holiday}")
@@ -86,7 +87,6 @@ while running:
         
         # Seperate tweets through out the day
         if holiday != holidays[len(holidays) - 1]:
-            sleepTime = secondsTilMidnight()/len(holidays)-holidays.index(holiday)+1
             print(f"In {round(sleepTime/60)} minutes the next tweet will be posted")
             sleep(sleepTime)
     
