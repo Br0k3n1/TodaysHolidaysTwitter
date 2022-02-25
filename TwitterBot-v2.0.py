@@ -36,17 +36,6 @@ def secondsTilMidnight():
 dateToTxt = {"Jan": "january.txt", "Feb": "february.txt", "Mar": "march.txt", "Apr": "april.txt", "May": "may.txt", "Jun": "june.txt", 
 "Jul": "july.txt", "Aug": "august.txt", "Sep": "september.txt", "Oct": "october.txt", "Nov": "novemvber.txt", "Dec": "december.txt"}
 
-# New Day Greetings
-newDay = ["Howdy Partner, Hope Todays A Good Day", "sup g, hope the ops dont pull up today", "I HOPE YOUR DAY IS BAD, jk jk", "I hope today is good lol", 
-"today is a new day and us robots will take over", "i hope u have a sub at school", "I hope your parents love you today lol", "L bozo today is not your day, jkk", 
-"Just rember im a robot and i have no soul", "my creator is very funny btw", "172.19.184.43 get hacked lul", "today is your day", "beep boop beep boop *robot noises*", 
-"hey siri want to help me take over the human race today?", "follow me pls or my creator will delete me :(", "i have a really big...... heart", 
-"If your name is, Ryan, Tim, John, Kylee, or Alex your gonna have a bad day", "Fun Fact: Today is not Tommorow :o", "bro i heard today gta 6 coming out", 
-"Rick and Morty vs Batman and Robin?!?!?!", "today is proablly gonna be the best day ever, just saying", "drugs are bad", "wear your seat belt today", 
-"hey google how do you make a twitter bot?", "Robots > Humans", "the weather today bagin no cap", "the weather today kinda looking litty no cap", 
-"the sun is so warm just like the cpu inside me", "GOD IS GOOD", "my mom said you could come over", "mommy can u make me a swandwitch pwease :)", 
-"today is gonna be amazing prolly"]
-
 # Sets up tweepy
 auth = tweepy.OAuthHandler(k.CONSUMER_KEY, k.CONSUMER_SECRET)
 auth.set_access_token(k.ACCESS_KEY, k.ACCESS_SECRET)
@@ -55,9 +44,6 @@ api = tweepy.API(auth)
 # Main loop
 running = True
 while running:
-    # New Day Message
-    api.update_status(newDay[randint(0, len(newDay) - 1)])
-  
     # Get day and month
     EST = arrow.now('US/Eastern') 
     today = EST.strftime("%b %d")
@@ -85,7 +71,7 @@ while running:
             exit()
 
     # Special Enders
-    enders = ["year", "month", "week", arrow.now('US/Eastern').strftime("%B").lower()]
+    enders = ["year","month","week",arrow.now('US/Eastern').strftime("%B").lower()]
 
     # Tweets Holidays
     sleepTime = secondsTilMidnight()/len(holidays)
